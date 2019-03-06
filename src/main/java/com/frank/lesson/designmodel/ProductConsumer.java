@@ -53,7 +53,7 @@ public class ProductConsumer {
 
     //内部类[仓库类]
     private class CangKu {
-        private static final int MAX_CANGKU = 1;//仓库最大容量为1个位子。
+        private static final int MAX_CANGKU = 3;//仓库最大容量为3个位子。
         private List innerList = new ArrayList<>(MAX_CANGKU);
 
         //仓库添加货物
@@ -71,7 +71,8 @@ public class ProductConsumer {
             if (isEmpty()) {
                 throw new IndexOutOfBoundsException();
             } else {
-                innerList.remove(MAX_CANGKU - 1);
+                //innerList.remove(MAX_CANGKU - 1);//这个代码仓库大小必须为1。
+                innerList.remove(0);
             }
             System.out.println(Thread.currentThread().toString() + "库存-1。");
         }
@@ -91,7 +92,7 @@ public class ProductConsumer {
     public void test() {
         ProductConsumer productConsumer = new ProductConsumer();
         Runnable runProduce = new Runnable() {
-            int count = 100;//生产尝试次数
+            int count = 20;//生产尝试次数
 
             @Override
             public void run() {
@@ -101,7 +102,7 @@ public class ProductConsumer {
             }
         };
         Runnable runConsume = new Runnable() {
-            int count = 100;//消费尝试次数
+            int count = 20;//消费尝试次数
 
             @Override
             public void run() {
@@ -110,11 +111,11 @@ public class ProductConsumer {
                 }
             }
         };
-
-        for (int i = 0; i < 2; i++) {
+        //创建若干个线程去测试
+        for (int i = 0; i < 10; i++) {
             new Thread(runConsume).start();
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 10; i++) {
             new Thread(runProduce).start();
         }
     }
